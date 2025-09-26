@@ -55,6 +55,25 @@ public class UsuarioController {
         return newUsuario;
     }
 
-    @PostMapping("/{id}")
-    public
+    @PutMapping("/{id}")
+    public Usuario atualizarUsuario(@PathVariable int id, @RequestBody Usuario usuario){
+        Usuario newUsuario = new Usuario();
+        try{
+            newUsuario = service.atualizarUsuario(id, usuario);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return newUsuario;
+    }
+
+    @DeleteMapping("/{id}")
+    public Usuario deletarUsuario(@PathVariable int id){
+        Usuario newUsuario = new Usuario();
+        try{
+            newUsuario = service.deletarUsuario(id);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return newUsuario;
+    }
 }

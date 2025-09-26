@@ -28,11 +28,21 @@ public class UsuarioService {
         return repository.buscarUsuarioPorID(id);
     }
 
-    public void atualizarUsuario(Usuario usuario) throws SQLException{
-        repository.atualizarUsuario(usuario);
+    public Usuario atualizarUsuario(int id, Usuario usuario) throws SQLException{
+        List<Usuario> usuarios = repository.buscarTodosUsuarios();
+
+        for(Usuario u : usuarios){
+            if(u.getId() == id){
+                usuario.setId(id);
+                repository.atualizarUsuario(usuario);
+                return usuario;
+            }
+        }
+        throw new RuntimeException("ID do usuário não existe!");
     }
 
-    public void deletarUsuario(int id) throws SQLException{
+    public Usuario deletarUsuario(int id) throws SQLException{
         repository.deletarUsuario(id);
+        return null;
     }
 }

@@ -77,7 +77,7 @@ public class LivroDAO {
     }
 
     public void atualizarLivro(Livro livro) throws SQLException{
-        String query = "UPDATE livro SER titulo = ?, autor = ?, ano_publicacao = ? WHERE id = ?";
+        String query = "UPDATE livro SET titulo = ?, autor = ?, ano_publicacao = ? WHERE id = ?";
 
         try(Connection conn = Conexao.conectar();
         PreparedStatement stmt = conn.prepareStatement(query)){

@@ -19,6 +19,8 @@ public class Livro {
         this.anoPublicacao = anoPublicacao;
     }
 
+    public Livro(){}
+
     public int getId() {
         return id;
     }
