@@ -90,6 +90,22 @@ public class LivroDAO {
         }
     }
 
+    public boolean livroExiste(int id) throws SQLException{
+        String query = "SELECT titulo FROM livro WHERE id = ?";
+
+        try(Connection conn = Conexao.conectar();
+        PreparedStatement stmt = conn.prepareStatement(query)){
+
+            stmt.setInt(1,id);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void deletarLivro(int id) throws SQLException{
         String query = "DELETE FROM livro WHERE id = ?";
 

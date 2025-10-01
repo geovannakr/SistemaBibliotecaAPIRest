@@ -1,6 +1,9 @@
 package com.example.sistemaBiblioteca.service;
 
+import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRequisicaoDto;
+import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRespostaDto;
 import com.example.sistemaBiblioteca.model.Usuario;
+import com.example.sistemaBiblioteca.mapper.UsuarioMapper;
 import com.example.sistemaBiblioteca.repository.UsuarioDAO;
 import org.springframework.stereotype.Service;
 
@@ -10,25 +13,33 @@ import java.util.List;
 @Service
 public class UsuarioService {
 
+    private final UsuarioMapper mapper;
+
     private final UsuarioDAO repository;
 
-    public UsuarioService(UsuarioDAO repository) {
+    public UsuarioService(UsuarioMapper mapper, UsuarioDAO repository) {
+        this.mapper = mapper;
         this.repository = repository;
     }
 
-    public Usuario criarUsuario(Usuario usuario) throws SQLException{
-        return repository.inserirUsuario(usuario);
+    public CriacaoUsuarioRespostaDto criarUsuario(CriacaoUsuarioRequisicaoDto requisicaoDto) throws SQLException {
+        return mapper.paraRespostaDto(repository.inserirUsuario(mapper.paraEntidade(requisicaoDto)));
     }
 
-    public List<Usuario> listarUsuarios() throws SQLException{
-        return repository.buscarTodosUsuarios();
+    public List<CriacaoUsuarioRespostaDto> listarUsuarios() throws SQLException{
+        return repository.buscarTodosUsuarios().stream().map(mapper::paraRespostaDto).toList();
     }
 
-    public Usuario listarUsuarioPorId(int id) throws SQLException{
-        return repository.buscarUsuarioPorID(id);
+    public CriacaoUsuarioRespostaDto listarUsuarioPorId(int id) throws SQLException{
+        Usuario usuario = repository.buscarUsuarioPorID(id);
+
+        if(usuario == null){
+            throw new RuntimeException("Usuário inexistente!");
+        }
+        return mapper.paraRespostaDto(repository.buscarUsuarioPorID(id));
     }
 
-    public Usuario atualizarUsuario(int id, Usuario usuario) throws SQLException{
+    /*public Usuario atualizarUsuario(int id, Usuario usuario) throws SQLException{
         List<Usuario> usuarios = repository.buscarTodosUsuarios();
 
         for(Usuario u : usuarios){
@@ -39,10 +50,13 @@ public class UsuarioService {
             }
         }
         throw new RuntimeException("ID do usuário não existe!");
-    }
+    }*/
 
-    public Usuario deletarUsuario(int id) throws SQLException{
-        repository.deletarUsuario(id);
-        return null;
+    public void deletarUsuario(int id) throws SQLException{
+        Usuario usuario = repository.buscarUsuarioPorID(id);
+        if(!repository.usuarioExiste(id)){
+            throw new RuntimeException("Usuário inexistente!");
+        }
+         repository.deletarUsuario(id);
     }
 }

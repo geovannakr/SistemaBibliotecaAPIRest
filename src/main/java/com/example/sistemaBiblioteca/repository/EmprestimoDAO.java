@@ -94,6 +94,22 @@ public class EmprestimoDAO {
         }
     }
 
+    public boolean emprestimoExiste(int id) throws SQLException{
+        String query = "SELECT livro_id FROM emprestimo WHERE id = ?";
+
+        try(Connection conn = Conexao.conectar();
+        PreparedStatement stmt = conn.prepareStatement(query)){
+
+            stmt.setInt(1,id);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void deletarEmprestimo(int id) throws SQLException{
         String query = "DELETE FROM emprestimo WHERE id = ?";
 

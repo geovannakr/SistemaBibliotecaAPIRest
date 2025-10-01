@@ -1,5 +1,7 @@
 package com.example.sistemaBiblioteca.controller;
 
+import com.example.sistemaBiblioteca.dto.livro.CriacaoLivroRequisicaoDto;
+import com.example.sistemaBiblioteca.dto.livro.CriacaoLivroRespostaDto;
 import com.example.sistemaBiblioteca.model.Livro;
 import com.example.sistemaBiblioteca.model.Usuario;
 import com.example.sistemaBiblioteca.service.LivroService;
@@ -22,42 +24,40 @@ public class LivroController {
         }
 
         @PostMapping
-        public ResponseEntity<Livro> criarLivro(
-                @RequestBody Livro livro
-        ){
-            Livro newUser = new Livro();
+        public ResponseEntity<CriacaoLivroRespostaDto> criarLivro(
+                @RequestBody CriacaoLivroRequisicaoDto requisicaoLivro
+                ){
             try{
-                newUser = service.criarLivro(livro);
+                return ResponseEntity.status(HttpStatus.CREATED).body(service.criarLivro(requisicaoLivro));
             }catch (SQLException e){
                 e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
-            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
         }
 
         @GetMapping
-        public ResponseEntity<List<Livro>> buscarTodosLivros(){
+        public ResponseEntity<List<CriacaoLivroRespostaDto>> buscarTodosLivros(){
             List<Livro> livros =new ArrayList<>();
-
             try{
-                livros = service.listarLivros();
+                return ResponseEntity.status(HttpStatus.OK).body(service.listarLivros());
             }catch (SQLException e){
                 e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
-            return ResponseEntity.status(HttpStatus.OK).body(livros);
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<Livro> buscarLivroPorId(@PathVariable int id){
+        public ResponseEntity<CriacaoLivroRespostaDto> buscarLivroPorId(@PathVariable int id){
             Livro newLivro = new Livro();
             try{
-                newLivro = service.listarLivroPorID(id);
+                return ResponseEntity.status(HttpStatus.OK).body(service.listarLivroPorID(id));
             }catch (SQLException e){
                 e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
-            return ResponseEntity.status(HttpStatus.OK).body(newLivro);
         }
 
-        @PutMapping("/{id}")
+        /*@PutMapping("/{id}")
         public ResponseEntity<Livro> atualizarLivro(@PathVariable int id, @RequestBody Livro livro){
             Livro newLivro = new Livro();
             try{
@@ -66,7 +66,7 @@ public class LivroController {
                 e.printStackTrace();
             }
             return ResponseEntity.status(HttpStatus.OK).body(newLivro);
-        }
+        }*/
 
         @DeleteMapping("/{id}")
         public ResponseEntity<Void> deletarLivro(@PathVariable int id){

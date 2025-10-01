@@ -1,5 +1,7 @@
 package com.example.sistemaBiblioteca.controller;
 
+import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRequisicaoDto;
+import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRespostaDto;
 import com.example.sistemaBiblioteca.model.Usuario;
 import com.example.sistemaBiblioteca.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -22,42 +24,39 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(
-        @RequestBody Usuario usuario
-    ){
-        Usuario newUser = new Usuario();
+    public ResponseEntity<CriacaoUsuarioRespostaDto> criarUsuario(
+            @RequestBody CriacaoUsuarioRequisicaoDto requisicaoUsuario
+            ){
         try{
-            newUser = service.criarUsuario(usuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.criarUsuario(requisicaoUsuario));
         }catch (SQLException e){
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> buscarTodosUsuarios(){
+    public ResponseEntity<List<CriacaoUsuarioRespostaDto>> buscarTodosUsuarios(){
         List<Usuario> usuarios =new ArrayList<>();
-
         try{
-            usuarios = service.listarUsuarios();
+            return ResponseEntity.status(HttpStatus.OK).body(service.listarUsuarios());
         }catch (SQLException e){
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(usuarios);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarUsuarioPorID(@PathVariable int id){
-        Usuario newUsuario = new Usuario();
+    public ResponseEntity<CriacaoUsuarioRespostaDto> buscarUsuarioPorID(@PathVariable int id){
         try{
-            newUsuario = service.listarUsuarioPorId(id);
+            return ResponseEntity.status(HttpStatus.OK).body(service.listarUsuarioPorId(id));
         }catch (SQLException e){
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(newUsuario);
     }
 
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     public ResponseEntity<Usuario> atualizarUsuario(@PathVariable int id, @RequestBody Usuario usuario){
         Usuario newUsuario = new Usuario();
         try{
@@ -66,7 +65,7 @@ public class UsuarioController {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.OK).body(newUsuario);
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable int id){
