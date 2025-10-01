@@ -2,6 +2,8 @@ package com.example.sistemaBiblioteca.controller;
 
 import com.example.sistemaBiblioteca.model.Usuario;
 import com.example.sistemaBiblioteca.service.UsuarioService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
@@ -20,7 +22,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario criarUsuario(
+    public ResponseEntity<Usuario> criarUsuario(
         @RequestBody Usuario usuario
     ){
         Usuario newUser = new Usuario();
@@ -29,11 +31,11 @@ public class UsuarioController {
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return newUser;
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @GetMapping
-    public List<Usuario> buscarTodosUsuarios(){
+    public ResponseEntity<List<Usuario>> buscarTodosUsuarios(){
         List<Usuario> usuarios =new ArrayList<>();
 
         try{
@@ -41,39 +43,38 @@ public class UsuarioController {
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return usuarios;
+        return ResponseEntity.status(HttpStatus.OK).body(usuarios);
     }
 
     @GetMapping("/{id}")
-    public Usuario buscarUsuarioPorID(@PathVariable int id){
+    public ResponseEntity<Usuario> buscarUsuarioPorID(@PathVariable int id){
         Usuario newUsuario = new Usuario();
         try{
             newUsuario = service.listarUsuarioPorId(id);
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return newUsuario;
+        return ResponseEntity.status(HttpStatus.OK).body(newUsuario);
     }
 
     @PutMapping("/{id}")
-    public Usuario atualizarUsuario(@PathVariable int id, @RequestBody Usuario usuario){
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable int id, @RequestBody Usuario usuario){
         Usuario newUsuario = new Usuario();
         try{
             newUsuario = service.atualizarUsuario(id, usuario);
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return newUsuario;
+        return ResponseEntity.status(HttpStatus.OK).body(newUsuario);
     }
 
     @DeleteMapping("/{id}")
-    public Usuario deletarUsuario(@PathVariable int id){
-        Usuario newUsuario = new Usuario();
+    public ResponseEntity<Void> deletarUsuario(@PathVariable int id){
         try{
-            newUsuario = service.deletarUsuario(id);
+            service.deletarUsuario(id);
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return newUsuario;
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
