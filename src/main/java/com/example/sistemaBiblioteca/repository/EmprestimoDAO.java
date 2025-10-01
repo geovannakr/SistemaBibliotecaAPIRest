@@ -43,8 +43,8 @@ public class EmprestimoDAO {
 
             while(rs.next()){
                 int id = rs.getInt("id");
-                int idLivro = rs.getInt("idLivro");
-                int idUsuario = rs.getInt("idUsuario");
+                int idLivro = rs.getInt("livro_id");
+                int idUsuario = rs.getInt("usuario_id");
                 Date dataEmprestimo = rs.getDate("data_emprestimo");
                 Date dataDevolucao = rs.getDate("data_devolucao");
 

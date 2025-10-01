@@ -49,7 +49,7 @@ public class LivroService {
     public void deletarLivro(int id) throws SQLException{
         Livro livro = repository.buscarLivroPorID(id);
 
-        if(repository.livroExiste(id)){
+        if(!repository.livroExiste(id)){
             throw new RuntimeException("Livro inexistente");
         }
         repository.deletarLivro(id);
