@@ -14,4 +14,15 @@ public class UsuarioMapper {
     public CriacaoUsuarioRespostaDto paraRespostaDto(Usuario usuario){
         return new CriacaoUsuarioRespostaDto(usuario.getId(), usuario.getNome(), usuario.getEmail());
     }
+
+    public Usuario paraUpdate(CriacaoUsuarioRequisicaoDto requisicaoDto, Usuario usuario){
+        if(requisicaoDto.nome() != usuario.getNome() && requisicaoDto.nome() != null){
+            usuario.setNome(requisicaoDto.nome());
+        }
+
+        if(requisicaoDto.email() != usuario.getEmail() && requisicaoDto.email() != null){
+            usuario.setEmail(requisicaoDto.email());
+        }
+        return usuario;
+    }
 }

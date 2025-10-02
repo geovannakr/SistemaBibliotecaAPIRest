@@ -87,7 +87,7 @@ public List<Usuario> buscarTodosUsuarios() throws SQLException{
     }
 
     public boolean usuarioExiste(int id) throws SQLException{
-        String query = "SELECT nome FROM usuario WHERE id = ?";
+        String query = "SELECT id FROM usuario WHERE id = ?";
 
         try(Connection conn = Conexao.conectar();
         PreparedStatement stmt = conn.prepareStatement(query)){

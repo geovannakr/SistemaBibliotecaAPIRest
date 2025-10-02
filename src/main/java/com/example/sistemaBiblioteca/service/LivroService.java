@@ -2,8 +2,11 @@ package com.example.sistemaBiblioteca.service;
 
 import com.example.sistemaBiblioteca.dto.livro.CriacaoLivroRequisicaoDto;
 import com.example.sistemaBiblioteca.dto.livro.CriacaoLivroRespostaDto;
+import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRequisicaoDto;
+import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRespostaDto;
 import com.example.sistemaBiblioteca.mapper.LivroMapper;
 import com.example.sistemaBiblioteca.model.Livro;
+import com.example.sistemaBiblioteca.model.Usuario;
 import com.example.sistemaBiblioteca.repository.LivroDAO;
 import org.springframework.stereotype.Service;
 
@@ -33,18 +36,18 @@ public class LivroService {
         return mapper.paraRequisicaoDto(repository.buscarLivroPorID(id));
     }
 
-   /* public Livro atualizarLivro(int id, Livro livro) throws SQLException{
-        List<Livro> livros = repository.buscarTodosLivros();
+    public CriacaoLivroRespostaDto atualizarLivro(int id, CriacaoLivroRequisicaoDto requisicaoLivro) throws SQLException{
+        Livro livro = repository.buscarLivroPorID(id);
 
-        for(Livro li : livros){
-            if(li.getId() == id){
-                livro.setId(id);
-                repository.atualizarLivro(livro);
-                return livro;
-            }
+        if(livro == null){
+            throw new RuntimeException("Usuário inexistente!");
         }
-        throw new RuntimeException("ID do usuário não existe!");
-    }*/
+
+        Livro newLivro = mapper.paraUpdate(requisicaoLivro, livro);
+        repository.atualizarLivro(newLivro);
+        return mapper.paraRequisicaoDto(newLivro);
+    }
+
 
     public void deletarLivro(int id) throws SQLException{
         Livro livro = repository.buscarLivroPorID(id);

@@ -56,16 +56,14 @@ public class UsuarioController {
         }
     }
 
-    /*@PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable int id, @RequestBody Usuario usuario){
-        Usuario newUsuario = new Usuario();
+    @PutMapping("/{id}")
+    public ResponseEntity<CriacaoUsuarioRespostaDto> atualizarUsuario(@PathVariable int id, @RequestBody CriacaoUsuarioRequisicaoDto requisicaoUsuario){
         try{
-            newUsuario = service.atualizarUsuario(id, usuario);
-        }catch (SQLException e){
-            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.OK).body(service.atualizarUsuario(id, requisicaoUsuario));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(newUsuario);
-    }*/
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable int id){

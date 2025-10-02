@@ -2,6 +2,8 @@ package com.example.sistemaBiblioteca.controller;
 
 import com.example.sistemaBiblioteca.dto.livro.CriacaoLivroRequisicaoDto;
 import com.example.sistemaBiblioteca.dto.livro.CriacaoLivroRespostaDto;
+import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRequisicaoDto;
+import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRespostaDto;
 import com.example.sistemaBiblioteca.model.Livro;
 import com.example.sistemaBiblioteca.model.Usuario;
 import com.example.sistemaBiblioteca.service.LivroService;
@@ -57,16 +59,14 @@ public class LivroController {
             }
         }
 
-        /*@PutMapping("/{id}")
-        public ResponseEntity<Livro> atualizarLivro(@PathVariable int id, @RequestBody Livro livro){
-            Livro newLivro = new Livro();
+        @PutMapping("/{id}")
+        public ResponseEntity<CriacaoLivroRespostaDto> atualizarLivro(@PathVariable int id, @RequestBody CriacaoLivroRequisicaoDto requisicaoLivro){
             try{
-                newLivro = service.atualizarLivro(id, livro);
-            }catch (SQLException e){
-                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.OK).body(service.atualizarLivro(id, requisicaoLivro));
+            }catch (Exception e){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
-            return ResponseEntity.status(HttpStatus.OK).body(newLivro);
-        }*/
+        }
 
         @DeleteMapping("/{id}")
         public ResponseEntity<Void> deletarLivro(@PathVariable int id){
